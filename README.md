@@ -3,7 +3,8 @@
 ###About
 
 	This project is not completed. I'm working on.
-	It's a mobile and wearable app. Mark down the shopping list, and sync to wearable. Leave your phone in your bag when Supermarket shopping. Make wearable useful.
+	It's a mobile and wearable app. Mark down the shopping list, and sync to wearable. 
+	Leave your phone in your bag when Supermarket shopping. Make wearable useful.
 
 
 ###System Requirements : 
