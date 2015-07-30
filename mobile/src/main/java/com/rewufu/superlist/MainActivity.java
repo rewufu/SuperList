@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.rewufu.superlist.adapter.SideListAdapter;
+import com.rewufu.superlist.dao.ListDao;
 import com.rewufu.superlist.entities.Side_List_Item;
 import com.rewufu.superlist.fragments.ContentFragment;
 
@@ -74,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     @Override
@@ -99,7 +99,10 @@ public class MainActivity extends AppCompatActivity {
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            if (TextUtils.equals(text.getText().toString().trim(), "")) {
+                            ArrayList<String> lists = new ListDao(getApplicationContext()).queryLists();
+                            if (TextUtils.equals(text.getText().toString().trim(), "") ||
+                                    (lists != null && lists.contains(text.getText().toString()))) {
+                                //keep dialog always on
                                 try {
                                     Field field = dialogInterface.getClass().getSuperclass().getDeclaredField("mShowing");
                                     field.setAccessible(true);
@@ -107,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (Exception e) {
                                     Log.d("", e.getMessage());
                                 }
-                                Toast.makeText(getApplicationContext(), "Input is empty", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Input is empty or this is already used.", Toast.LENGTH_LONG).show();
                             } else {
                                 try {
                                     Field field = dialogInterface.getClass().getSuperclass().getDeclaredField("mShowing");
@@ -116,21 +119,23 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (Exception e) {
                                     Log.d("", e.getMessage());
                                 }
-                                Toast.makeText(getApplicationContext(), text.getText().toString(), Toast.LENGTH_SHORT).show();
+                                new ListDao(getApplicationContext()).insertLists(text.getText().toString().trim());
+                                Toast.makeText(getApplicationContext(), "Add success.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                try {
-                                    Field field = dialogInterface.getClass().getSuperclass().getDeclaredField("mShowing");
-                                    field.setAccessible(true);
-                                    field.set(dialogInterface, true);
-                                } catch (Exception e) {
-                                    Log.d("", e.getMessage());
-                                }
-                            }
-                        })
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    //close dialog
+                    try {
+                        Field field = dialogInterface.getClass().getSuperclass().getDeclaredField("mShowing");
+                        field.setAccessible(true);
+                        field.set(dialogInterface, true);
+                    } catch (Exception e) {
+                        Log.d("", e.getMessage());
+                    }
+                }
+            })
                     .setCancelable(false)
                     .show();
             return true;
