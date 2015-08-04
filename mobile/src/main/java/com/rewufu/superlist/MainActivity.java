@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -29,40 +30,35 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
-    @Bind(R.id.toolbar)
-    Toolbar mToolbar;
-    @Bind(R.id.drawerLayout)
-    DrawerLayout mDrawerLayout;
-    @Bind(R.id.sideList)
-    ListView mSideList;
-    private ActionBarDrawerToggle mDrawerToggle;
+    private FragmentManager fragmentManager;
+    private Fragment contentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
         initView();
     }
 
     private void initView() {
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        ListView mSideList = (ListView) findViewById(R.id.sideList);
         mToolbar.setTitle("My Lists");
         mToolbar.setLogo(R.mipmap.ic_toolbar);
         mToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.open,
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.open,
                 R.string.close);
         mDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        Fragment contentFragment = new ContentFragment();
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        contentFragment = new ContentFragment();
+        fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.contentLayout, contentFragment).commit();
         List<Side_List_Item> side_list = new ArrayList<>();
         side_list.add(new Side_List_Item(R.mipmap.ic_side_list, " My Lists"));
@@ -120,6 +116,8 @@ public class MainActivity extends AppCompatActivity {
                                     Log.d("", e.getMessage());
                                 }
                                 new ListDao(getApplicationContext()).insertLists(text.getText().toString().trim());
+                                contentFragment = new ContentFragment();
+                                fragmentManager.beginTransaction().replace(R.id.contentLayout, contentFragment).commit();
                                 Toast.makeText(getApplicationContext(), "Add success.", Toast.LENGTH_SHORT).show();
                             }
                         }
