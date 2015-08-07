@@ -1,5 +1,6 @@
 package com.rewufu.superlist.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.rewufu.superlist.DetailActivity;
 import com.rewufu.superlist.R;
 import com.rewufu.superlist.adapter.RecyclerAdapter;
 import com.rewufu.superlist.dao.ListDao;
@@ -52,7 +54,9 @@ public class ContentFragment extends Fragment  implements MyItemClickListener, M
 
     @Override
     public void onItemClick(View view, int position) {
-        Toast.makeText(getActivity(), list.get(position), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getActivity(), DetailActivity.class);
+        intent.putExtra("listName", list.get(position));
+        startActivity(intent);
     }
 
     @Override

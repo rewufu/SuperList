@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/drawer_tab1"
+            android:icon="@drawable/ic_drawer_mylist"
+            android:title="My Lists"/>
+        <item
+            android:id="@+id/drawer_tab2"
+            android:icon="@drawable/ic_drawer_settings"
+            android:title="Settings"/>
+    </group>
+
+    <item android:title="other">
+        <menu>
+            <item
+                android:id="@+id/drawer_about"
+                android:icon="@drawable/ic_drawer_info"
+                android:title="About"/>
+        </menu>
+    </item>
+
+</menu>

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -14,21 +15,14 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.rewufu.superlist.adapter.SideListAdapter;
 import com.rewufu.superlist.dao.ListDao;
-import com.rewufu.superlist.entities.Side_List_Item;
 import com.rewufu.superlist.fragments.ContentFragment;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -44,13 +38,30 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        ListView mSideList = (ListView) findViewById(R.id.sideList);
+        final DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mToolbar.setTitle("My Lists");
         mToolbar.setLogo(R.mipmap.ic_toolbar);
         mToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        mDrawerLayout.closeDrawers();
+                        switch (menuItem.getItemId()) {
+                            case R.id.drawer_tab2:
+                                //settings
+                                return true;
+                            case R.id.drawer_about:
+                                //show info in a dialog
+                                return true;
+                        }
+                        return false;
+                    }
+                }
+        );
 
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.open,
                 R.string.close);
@@ -60,17 +71,6 @@ public class MainActivity extends AppCompatActivity {
         contentFragment = new ContentFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.contentLayout, contentFragment).commit();
-        List<Side_List_Item> side_list = new ArrayList<>();
-        side_list.add(new Side_List_Item(R.mipmap.ic_side_list, " My Lists"));
-        side_list.add(new Side_List_Item(R.mipmap.ic_side_settings, " Settings"));
-        ArrayAdapter adapter = new SideListAdapter(this, R.layout.side_list_item, side_list);
-        mSideList.setAdapter(adapter);
-        mSideList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-            }
-        });
     }
 
     @Override
