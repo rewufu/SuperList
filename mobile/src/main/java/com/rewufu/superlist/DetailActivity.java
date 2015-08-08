@@ -1,6 +1,8 @@
 package com.rewufu.superlist;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -31,9 +33,6 @@ public class DetailActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-//        SlidingTabLayout slidingTab = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
-//        slidingTab.setSelectedIndicatorColors(getResources().getColor(R.color.toolbar));
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
         PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
         pagerAdapter.addFragment(DetailFragmentList.newInstance(listName), "List");
@@ -41,6 +40,8 @@ public class DetailActivity extends AppCompatActivity {
         viewPager.setAdapter(pagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setTabTextColors(ColorStateList.valueOf(Color.WHITE));
+        tabLayout.setBackgroundColor(Color.DKGRAY);
         tabLayout.setupWithViewPager(viewPager);
 
     }
@@ -63,6 +64,10 @@ public class DetailActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+        if (id == android.R.id.home) {
+            this.finish();
+            return true;
+        }
         if (id == R.id.action_settings) {
             return true;
         }

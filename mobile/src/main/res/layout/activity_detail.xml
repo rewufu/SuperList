@@ -11,11 +11,6 @@
         android:background="#669900"
         android:fitsSystemWindows="true"></android.support.v7.widget.Toolbar>
 
-    <!--<com.rewufu.superlist.view.SlidingTabLayout-->
-        <!--android:id="@+id/sliding_tabs"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"></com.rewufu.superlist.view.SlidingTabLayout>-->
-
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"

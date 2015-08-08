@@ -4,7 +4,14 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimaryDark">#228B22</item>
-        <item name="colorAccent">#FD87A9</item>
+        <item name="colorAccent">#669900</item>
+        <item name="colorControlNormal">#FFF</item>
+    </style>
+
+    <style name="MainTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimaryDark">#228B22</item>
+        <item name="colorAccent">#669900</item>
         <item name="colorControlNormal">#FFF</item>
     </style>
 
