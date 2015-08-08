@@ -20,7 +20,6 @@ public class SQLiteOpenHelper extends android.database.sqlite.SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_GOODS);
         sqLiteDatabase.execSQL(CREATE_LISTS);
         //init database
-
     }
 
     @Override
