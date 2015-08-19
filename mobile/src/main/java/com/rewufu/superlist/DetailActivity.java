@@ -8,24 +8,31 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.rewufu.superlist.adapter.PagerAdapter;
 import com.rewufu.superlist.fragments.DetailFragmentItem;
 import com.rewufu.superlist.fragments.DetailFragmentList;
 
 public class DetailActivity extends AppCompatActivity {
     private String listName;
-
+    private ViewPager viewPager;
+    private DetailFragmentItem detailFragmentItem;
+    private PagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
+        ImageLoader.getInstance().init(config);
         Intent intent = getIntent();
         listName = intent.getStringExtra("listName");
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         if(toolbar != null){
             setSupportActionBar(toolbar);
         }
@@ -33,8 +40,9 @@ public class DetailActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager());
+        detailFragmentItem = DetailFragmentItem.newInstance(listName);
         pagerAdapter.addFragment(DetailFragmentList.newInstance(listName), "List");
         pagerAdapter.addFragment(DetailFragmentItem.newInstance(listName), "Item");
         viewPager.setAdapter(pagerAdapter);
@@ -43,7 +51,6 @@ public class DetailActivity extends AppCompatActivity {
         tabLayout.setTabTextColors(ColorStateList.valueOf(Color.WHITE));
         tabLayout.setBackgroundColor(Color.DKGRAY);
         tabLayout.setupWithViewPager(viewPager);
-
     }
 
 
@@ -73,5 +80,17 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(1 == viewPager.getCurrentItem()){
+            if(keyCode == event.KEYCODE_BACK){
+                ((DetailFragmentItem)pagerAdapter.getItem(1)).onBackKeyDown();
+                return false;
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 }

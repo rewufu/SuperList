@@ -3,11 +3,11 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/drawer_tab1"
+            android:id="@+id/drawer_mylists"
             android:icon="@drawable/ic_drawer_mylist"
             android:title="My Lists"/>
         <item
-            android:id="@+id/drawer_tab2"
+            android:id="@+id/drawer_settings"
             android:icon="@drawable/ic_drawer_settings"
             android:title="Settings"/>
     </group>

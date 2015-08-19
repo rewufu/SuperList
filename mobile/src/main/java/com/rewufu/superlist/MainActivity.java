@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.rewufu.superlist.dao.ListDao;
 import com.rewufu.superlist.fragments.ContentFragment;
+import com.rewufu.superlist.fragments.Settings_Fragment;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar mToolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         final DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mToolbar.setTitle("My Lists");
         mToolbar.setLogo(R.mipmap.ic_toolbar);
@@ -51,8 +52,13 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         mDrawerLayout.closeDrawers();
                         switch (menuItem.getItemId()) {
-                            case R.id.drawer_tab2:
+                            case R.id.drawer_mylists:
+                                fragmentManager.beginTransaction().replace(R.id.contentLayout, contentFragment).commit();
+                                return true;
+                            case R.id.drawer_settings:
                                 //settings
+                                mToolbar.setTitle("Settings");
+                                fragmentManager.beginTransaction().replace(R.id.contentLayout, new Settings_Fragment()).commit();
                                 return true;
                             case R.id.drawer_about:
                                 //show info in a dialog

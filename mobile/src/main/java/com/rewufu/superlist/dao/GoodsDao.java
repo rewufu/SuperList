@@ -39,6 +39,45 @@ public class GoodsDao {
         return null;
     }
 
+    public ArrayList<String> queryGoodsByKind(String kind) {
+        SQLiteDatabase db = openHelper.getReadableDatabase();
+        if (db.isOpen()) {
+            Cursor cursor = db.rawQuery("select gName from goods where kind = ?;", new String[]{kind});
+            if (cursor != null && cursor.getCount() > 0) {
+                ArrayList<String> lists = new ArrayList<>();
+                while (cursor.moveToNext()) {
+                    String list = cursor.getString(0);
+                    lists.add(list);
+                }
+                db.close();
+                return lists;
+            }
+            db.close();
+            return null;
+        }
+        return null;
+    }
+
+
+    public ArrayList<String> queryKinds() {
+        SQLiteDatabase db = openHelper.getReadableDatabase();
+        if (db.isOpen()) {
+            Cursor cursor = db.rawQuery("select distinct kind from goods;", null);
+            if (cursor != null && cursor.getCount() > 0) {
+                ArrayList<String> lists = new ArrayList<>();
+                while (cursor.moveToNext()) {
+                    String list = cursor.getString(0);
+                    lists.add(list);
+                }
+                db.close();
+                return lists;
+            }
+            db.close();
+            return null;
+        }
+        return null;
+    }
+
 
 
 }

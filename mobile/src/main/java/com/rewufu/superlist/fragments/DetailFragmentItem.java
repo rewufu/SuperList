@@ -6,8 +6,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
 
 import com.rewufu.superlist.R;
+import com.rewufu.superlist.adapter.ItemAdapter;
+import com.rewufu.superlist.dao.GoodsDao;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,13 +21,12 @@ import com.rewufu.superlist.R;
  * create an instance of this fragment.
  */
 public class DetailFragmentItem extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
+    private ItemAdapter adapter;
+    private GridView gridView;
 
     // TODO: Rename and change types of parameters
     private String listName;
-
 
 
     /**
@@ -56,8 +61,30 @@ public class DetailFragmentItem extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detail_item, container, false);
+        View view = inflater.inflate(R.layout.fragment_detail_item, container, false);
+        gridView = (GridView) view.findViewById(R.id.gridView);
+        adapter = new ItemAdapter(getActivity(), R.layout.grid_item);
+        final List<String> list = new GoodsDao(getActivity()).queryKinds();
+        adapter.addAll(list);
+        gridView.setAdapter(adapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ItemAdapter mAdapter = new ItemAdapter(getActivity(), R.layout.grid_item);
+                List<String> mList = new GoodsDao(getActivity()).queryGoodsByKind(list.get(position));
+                mAdapter.addAll(mList);
+                gridView.setAdapter(mAdapter);
+            }
+        });
+        return view;
     }
 
+    public void onBackKeyDown(){
+        if(gridView.getAdapter() != adapter){
+            gridView.setAdapter(adapter);
+        }else {
+            getActivity().finish();
+        }
+    }
 
 }
