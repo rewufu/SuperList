@@ -2,6 +2,7 @@ package com.rewufu.superlist.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rewufu.superlist.R;
@@ -13,12 +14,14 @@ import com.rewufu.superlist.interfaces.MyItemLongClickListener;
  */
 public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
     public TextView title;
+    public ImageView image;
     private MyItemClickListener myItemClickListener;
     private MyItemLongClickListener myItemLongClickListener;
 
     public MyViewHolder(View itemView, MyItemClickListener itemClickListener, MyItemLongClickListener itemLongClickListener) {
         super(itemView);
-        title = (TextView) itemView.findViewById(R.id.item_team_title);
+        image = (ImageView) itemView.findViewById(R.id.item_image);
+        title = (TextView) itemView.findViewById(R.id.item_title);
         myItemClickListener = itemClickListener;
         myItemLongClickListener = itemLongClickListener;
         itemView.setOnClickListener(this);

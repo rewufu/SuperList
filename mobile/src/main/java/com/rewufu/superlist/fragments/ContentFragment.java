@@ -45,7 +45,7 @@ public class ContentFragment extends Fragment  implements MyItemClickListener, M
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(list);
+        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(list, 0);
         recyclerAdapter.setOnItemClickListener(this);
         recyclerAdapter.setOnItemLongClickListener(this);
         recyclerView.setAdapter(recyclerAdapter);

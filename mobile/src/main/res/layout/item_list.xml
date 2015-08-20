@@ -14,12 +14,12 @@
         android:padding="5dp">
 
         <ImageView
-            android:id="@+id/item_team_icon"
+            android:id="@+id/item_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/ic_list"/>
         <TextView
-            android:id="@+id/item_team_title"
+            android:id="@+id/item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="list"
@@ -29,8 +29,8 @@
             android:textColor="@android:color/black"
             android:textStyle="bold"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/item_team_icon"
-            android:layout_toEndOf="@+id/item_team_icon" />
+            android:layout_toRightOf="@+id/item_image"
+            android:layout_toEndOf="@+id/item_image" />
 
 
     </RelativeLayout>

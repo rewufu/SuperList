@@ -30,6 +30,7 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
         ImageLoader.getInstance().init(config);
+
         Intent intent = getIntent();
         listName = intent.getStringExtra("listName");
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);

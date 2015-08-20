@@ -54,7 +54,6 @@ public class ItemAdapter extends ArrayAdapter<String> {
         itemText.setText(item);
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .bitmapConfig(Bitmap.Config.RGB_565)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
                 .build();
         ImageLoader.getInstance().displayImage(ImageDownloader.Scheme.ASSETS.wrap("goods/" + item + ".jpg"), itemImage, options);
         ArrayList<String> itemList = new ListItemDao(context).queryItemByList(list);

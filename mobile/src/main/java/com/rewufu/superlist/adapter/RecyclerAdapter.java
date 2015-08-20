@@ -1,10 +1,14 @@
 package com.rewufu.superlist.adapter;
 
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.rewufu.superlist.R;
 import com.rewufu.superlist.interfaces.MyItemClickListener;
 import com.rewufu.superlist.interfaces.MyItemLongClickListener;
@@ -19,9 +23,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<MyViewHolder> {
     private ArrayList<String> teams;
     private MyItemClickListener myItemClickListener;
     private MyItemLongClickListener myItemLongClickListener;
+    private int type;
 
-    public RecyclerAdapter(ArrayList<String> list) {
-        teams = list;
+    public RecyclerAdapter(ArrayList<String> list, int type) {
+        this.teams = list;
+        this.type = type;
     }
 
     @Override
@@ -35,6 +41,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<MyViewHolder> {
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.title.setText(teams.get(position));
+        if(1 == type){
+            DisplayImageOptions options = new DisplayImageOptions.Builder()
+                    .bitmapConfig(Bitmap.Config.RGB_565)
+                    .build();
+            ImageLoader.getInstance().displayImage(ImageDownloader.Scheme.ASSETS.wrap("goods/" + teams.get(position) + ".jpg"), holder.image, options);
+
+        }
     }
 
     @Override
