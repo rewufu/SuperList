@@ -12,6 +12,7 @@ import android.widget.GridView;
 import com.rewufu.superlist.R;
 import com.rewufu.superlist.adapter.ItemAdapter;
 import com.rewufu.superlist.dao.GoodsDao;
+import com.rewufu.superlist.dao.ListItemDao;
 
 import java.util.List;
 
@@ -23,9 +24,9 @@ import java.util.List;
 public class DetailFragmentItem extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private ItemAdapter adapter;
+    private ItemAdapter secondAdapter;
+    private List<String> secondList;
     private GridView gridView;
-
-    // TODO: Rename and change types of parameters
     private String listName;
 
 
@@ -63,17 +64,26 @@ public class DetailFragmentItem extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_detail_item, container, false);
         gridView = (GridView) view.findViewById(R.id.gridView);
-        adapter = new ItemAdapter(getActivity(), R.layout.grid_item);
+        adapter = new ItemAdapter(getActivity(), R.layout.grid_item, listName);
         final List<String> list = new GoodsDao(getActivity()).queryKinds();
         adapter.addAll(list);
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ItemAdapter mAdapter = new ItemAdapter(getActivity(), R.layout.grid_item);
-                List<String> mList = new GoodsDao(getActivity()).queryGoodsByKind(list.get(position));
-                mAdapter.addAll(mList);
-                gridView.setAdapter(mAdapter);
+                if(gridView.getAdapter() == adapter){
+                    secondAdapter = new ItemAdapter(getActivity(), R.layout.grid_item, listName);
+                    secondList = new GoodsDao(getActivity()).queryGoodsByKind(list.get(position));
+                    secondAdapter.addAll(secondList);
+                    gridView.setAdapter(secondAdapter);
+                }else {
+                    if(!(new ListItemDao(getActivity()).queryItemByList(listName).contains(secondList.get(position)))){
+                        new ListItemDao(getActivity()).insertListItem(secondList.get(position), listName);
+                        secondAdapter.setClickTemp(position);
+                        secondAdapter.notifyDataSetChanged();
+                    }
+                }
+
             }
         });
         return view;

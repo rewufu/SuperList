@@ -20,6 +20,8 @@ public class SQLiteOpenHelper extends android.database.sqlite.SQLiteOpenHelper {
     private Context context;
     public static final  String CREATE_GOODS = "create table goods (gName varchar(20) primary key, kind varchar(20))";
     public static final  String CREATE_LISTS = "create table lists (list varchar(20))";
+    public static final  String CREATE_LISTITEM = "create table listitem (gName varchar(20) primary key, list varchar(20))";
+
 
     public SQLiteOpenHelper(Context context) {
         super(context, "SuperList.db", null, 1);
@@ -30,6 +32,7 @@ public class SQLiteOpenHelper extends android.database.sqlite.SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(CREATE_GOODS);
         sqLiteDatabase.execSQL(CREATE_LISTS);
+        sqLiteDatabase.execSQL(CREATE_LISTITEM);
         //init database
         String json = "";
         try {
