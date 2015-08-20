@@ -14,6 +14,7 @@ import com.rewufu.superlist.adapter.ItemAdapter;
 import com.rewufu.superlist.dao.GoodsDao;
 import com.rewufu.superlist.dao.ListItemDao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -77,13 +78,17 @@ public class DetailFragmentItem extends Fragment {
                     secondAdapter.addAll(secondList);
                     gridView.setAdapter(secondAdapter);
                 }else {
-                    if(!(new ListItemDao(getActivity()).queryItemByList(listName).contains(secondList.get(position)))){
+                    ArrayList<String> itemList = new ListItemDao(getActivity()).queryItemByList(listName);
+                    if(itemList != null && itemList.contains(secondList.get(position))){
+                        new ListItemDao(getActivity()).deleteItem(secondList.get(position));
+                        secondAdapter.setUnClickTemp(position);
+                        secondAdapter.notifyDataSetChanged();
+                    }else {
                         new ListItemDao(getActivity()).insertListItem(secondList.get(position), listName);
                         secondAdapter.setClickTemp(position);
                         secondAdapter.notifyDataSetChanged();
                     }
                 }
-
             }
         });
         return view;

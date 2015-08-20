@@ -22,7 +22,7 @@ public class ListItemDao {
     public ArrayList<String> queryItemByList(String list) {
         SQLiteDatabase db = openHelper.getReadableDatabase();
         if (db.isOpen()) {
-            Cursor cursor = db.rawQuery("select gName from listitem where list = ?;",
+            Cursor cursor = db.rawQuery("select gName from list_item where list = ?;",
                     new String[]{list});
             if (cursor != null && cursor.getCount() > 0) {
                 ArrayList<String> itemList = new ArrayList<>();
@@ -42,8 +42,17 @@ public class ListItemDao {
     public void insertListItem(String item, String list) {
         SQLiteDatabase db = openHelper.getWritableDatabase();
         if (db.isOpen()) {
-            db.execSQL("insert into listitem(gName, list) values (?, ?);",
+            db.execSQL("insert into list_item(gName, list) values (?, ?);",
                     new String[]{item, list});
+            db.close();
+        }
+    }
+
+    public void deleteItem(String item) {
+        SQLiteDatabase db = openHelper.getWritableDatabase();
+        if (db.isOpen()) {
+            db.execSQL("delete from list_item where gName = ?;",
+                    new String[]{item});
             db.close();
         }
     }
