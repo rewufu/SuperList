@@ -24,6 +24,7 @@ import java.util.ArrayList;
 public class DetailFragmentList extends Fragment implements MyItemClickListener {
     private static final String ARG_PARAM1 = "param1";
     private String listName;
+    private RecyclerAdapter recyclerAdapter;
 
 
     public static DetailFragmentList newInstance(String list) {
@@ -33,6 +34,16 @@ public class DetailFragmentList extends Fragment implements MyItemClickListener 
         fragment.setArguments(args);
         return fragment;
     }
+
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        if(isVisibleToUser){
+//            if(recyclerAdapter != null){
+//                recyclerAdapter.refresh(new ListItemDao(getActivity()).queryItemByList(listName));
+//            }
+//        }
+//    }
 
     public DetailFragmentList() {
         // Required empty public constructor
@@ -51,22 +62,17 @@ public class DetailFragmentList extends Fragment implements MyItemClickListener 
                              Bundle savedInstanceState) {
         // when list is empty
         ArrayList<String> list = new ListItemDao(getActivity()).queryItemByList(listName);
-        if(list == null){
+        if (list == null) {
             return inflater.inflate(R.layout.empty_list, container, false);
         }
         View view = inflater.inflate(R.layout.fragment_recycler, container, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(list, 1);
+        recyclerAdapter = new RecyclerAdapter(list, 1);
         recyclerAdapter.setOnItemClickListener(this);
         recyclerView.setAdapter(recyclerAdapter);
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override

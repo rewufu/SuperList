@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +24,7 @@ public class DetailActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private DetailFragmentItem detailFragmentItem;
     private PagerAdapter pagerAdapter;
+    private static boolean changed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,26 @@ public class DetailActivity extends AppCompatActivity {
         pagerAdapter.addFragment(DetailFragmentList.newInstance(listName), "List");
         pagerAdapter.addFragment(DetailFragmentItem.newInstance(listName), "Item");
         viewPager.setAdapter(pagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position == 0 && changed){
+                    Fragment fragment = pagerAdapter.getItem(position);
+                    getSupportFragmentManager().beginTransaction().detach(fragment).attach(fragment).commit();
+                    changed = false;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setTabTextColors(ColorStateList.valueOf(Color.WHITE));
         tabLayout.setBackgroundColor(Color.DKGRAY);
@@ -93,5 +114,9 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         return super.onKeyDown(keyCode, event);
+    }
+
+    public static void change(){
+        changed = true;
     }
 }

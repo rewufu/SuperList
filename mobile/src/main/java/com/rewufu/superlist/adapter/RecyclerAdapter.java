@@ -62,6 +62,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<MyViewHolder> {
         this.myItemLongClickListener = listener;
     }
 
-
-
+//    public void refresh(ArrayList<String> list){
+//        this.teams = list;
+//        this.notifyDataSetChanged();
+//    }
+    
 }

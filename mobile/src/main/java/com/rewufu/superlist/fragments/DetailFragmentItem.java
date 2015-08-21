@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.rewufu.superlist.DetailActivity;
 import com.rewufu.superlist.R;
 import com.rewufu.superlist.adapter.ItemAdapter;
 import com.rewufu.superlist.dao.GoodsDao;
@@ -83,10 +84,12 @@ public class DetailFragmentItem extends Fragment {
                         new ListItemDao(getActivity()).deleteItem(secondList.get(position));
                         secondAdapter.setUnClickTemp(position);
                         secondAdapter.notifyDataSetChanged();
+                        DetailActivity.change();
                     }else {
                         new ListItemDao(getActivity()).insertListItem(secondList.get(position), listName);
                         secondAdapter.setClickTemp(position);
                         secondAdapter.notifyDataSetChanged();
+                        DetailActivity.change();
                     }
                 }
             }
