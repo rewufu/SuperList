@@ -1,6 +1,7 @@
 package com.rewufu.superlist.adapter;
 
 import android.graphics.Bitmap;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.rewufu.superlist.R;
+import com.rewufu.superlist.entity.ListItem;
 import com.rewufu.superlist.interfaces.MyItemClickListener;
 import com.rewufu.superlist.interfaces.MyItemLongClickListener;
 import com.rewufu.superlist.viewholder.MyViewHolder;
@@ -20,14 +22,19 @@ import java.util.ArrayList;
  * Created by Bell on 7/30/15.
  */
 public class RecyclerAdapter extends RecyclerView.Adapter<MyViewHolder> {
-    private ArrayList<String> teams;
+    private ArrayList<ListItem> items;
+    private ArrayList<String> lists;
     private MyItemClickListener myItemClickListener;
     private MyItemLongClickListener myItemLongClickListener;
     private int type;
 
-    public RecyclerAdapter(ArrayList<String> list, int type) {
-        this.teams = list;
+    public RecyclerAdapter(ArrayList<ListItem> list, int type) {
+        this.items = list;
         this.type = type;
+    }
+
+    public RecyclerAdapter(ArrayList<String> list) {
+        lists = list;
     }
 
     @Override
@@ -40,31 +47,35 @@ public class RecyclerAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.title.setText(teams.get(position));
-        if(1 == type){
+        if (1 == type) {
+            holder.title.setText(items.get(position).getName());
+            if (items.get(position).isBought()) {
+                holder.title.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+                holder.title.getPaint().setAntiAlias(true);
+            }
             DisplayImageOptions options = new DisplayImageOptions.Builder()
                     .bitmapConfig(Bitmap.Config.RGB_565)
                     .build();
-            ImageLoader.getInstance().displayImage(ImageDownloader.Scheme.ASSETS.wrap("goods/" + teams.get(position) + ".jpg"), holder.image, options);
-
+            ImageLoader.getInstance().displayImage(ImageDownloader.Scheme.ASSETS.wrap("goods/" + items.get(position).getName() + ".jpg"), holder.image, options);
+        } else {
+            holder.title.setText(lists.get(position));
         }
     }
 
     @Override
     public int getItemCount() {
-        return teams.size();
+        if (1 == type) {
+            return items.size();
+        }
+        return lists.size();
     }
 
-    public void setOnItemClickListener(MyItemClickListener listener){
+    public void setOnItemClickListener(MyItemClickListener listener) {
         this.myItemClickListener = listener;
     }
-    public void setOnItemLongClickListener(MyItemLongClickListener listener){
+
+    public void setOnItemLongClickListener(MyItemLongClickListener listener) {
         this.myItemLongClickListener = listener;
     }
-
-//    public void refresh(ArrayList<String> list){
-//        this.teams = list;
-//        this.notifyDataSetChanged();
-//    }
 
 }

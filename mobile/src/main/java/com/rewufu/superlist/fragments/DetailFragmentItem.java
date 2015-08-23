@@ -85,14 +85,15 @@ public class DetailFragmentItem extends Fragment {
                     secondAdapter.addAll(secondList);
                     gridView.setAdapter(secondAdapter);
                 }else {
-                    ArrayList<String> itemList = listItemDao.queryItemByList(listName);
+                    ArrayList<String> itemList = listItemDao.queryNameByList(listName);
                     if(itemList != null && itemList.contains(secondList.get(position))){
                         listItemDao.deleteItem(secondList.get(position));
                         View view1 = gridView.getChildAt(position - gridView.getFirstVisiblePosition());
                         ImageView itemImage = (ImageView) view1.findViewById(R.id.itemImage);
                         TextView itemText = (TextView) view1.findViewById(R.id.itemText);
-                        itemText.setText(list.get(position));
+                        itemText.setText(secondList.get(position));
                         itemText.getPaint().setFlags(0);
+                        itemText.getPaint().setAntiAlias(true);
                         itemImage.setAlpha(1f);
                         DetailActivity.change();
                     }else {
@@ -100,7 +101,7 @@ public class DetailFragmentItem extends Fragment {
                         View view1 = gridView.getChildAt(position - gridView.getFirstVisiblePosition());
                         ImageView itemImage = (ImageView) view1.findViewById(R.id.itemImage);
                         TextView itemText = (TextView) view1.findViewById(R.id.itemText);
-                        itemText.setText(list.get(position));
+                        itemText.setText(secondList.get(position));
                         itemText.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
                         itemText.getPaint().setAntiAlias(true);
                         itemImage.setAlpha(0.5f);

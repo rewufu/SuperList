@@ -21,7 +21,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClic
     public MyViewHolder(View itemView, MyItemClickListener itemClickListener, MyItemLongClickListener itemLongClickListener) {
         super(itemView);
         image = (ImageView) itemView.findViewById(R.id.item_image);
-        title = (TextView) itemView.findViewById(R.id.item_title);
+        title = (TextView) itemView.findViewById(R.id.item_name);
         myItemClickListener = itemClickListener;
         myItemLongClickListener = itemLongClickListener;
         itemView.setOnClickListener(this);

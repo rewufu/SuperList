@@ -1,4 +1,4 @@
-package com.rewufu.superlist.entities;
+package com.rewufu.superlist.entity;
 
 /**
  * Created by Bell on 5/5/15.

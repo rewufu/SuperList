@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rewufu.superlist.R;
-import com.rewufu.superlist.entities.Side_List_Item;
+import com.rewufu.superlist.entity.Side_List_Item;
 
 import java.util.List;
 

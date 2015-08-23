@@ -30,7 +30,7 @@ public class ItemAdapter extends ArrayAdapter<String> {
         super(context, resource);
         this.context = context;
         this.resource = resource;
-        this.itemList = new ListItemDao(context).queryItemByList(list);
+        this.itemList = new ListItemDao(context).queryNameByList(list);
     }
 
 
