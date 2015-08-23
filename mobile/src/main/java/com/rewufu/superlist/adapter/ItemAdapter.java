@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.rewufu.superlist.R;
 import com.rewufu.superlist.dao.ListItemDao;
@@ -24,23 +23,14 @@ import java.util.ArrayList;
  */
 public class ItemAdapter extends ArrayAdapter<String> {
     private Context context;
-    private String list;
+    private ArrayList<String> itemList;
     private int resource;
-    private int clickTemp = -1;
-    private int unClickTemp = -1;
 
     public ItemAdapter(Context context, int resource, String list) {
         super(context, resource);
         this.context = context;
         this.resource = resource;
-        this.list = list;
-    }
-
-    public void setClickTemp(int position){
-        clickTemp = position;
-    }
-    public void setUnClickTemp(int position){
-        unClickTemp = position;
+        this.itemList = new ListItemDao(context).queryItemByList(list);
     }
 
 
@@ -56,17 +46,10 @@ public class ItemAdapter extends ArrayAdapter<String> {
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .build();
         ImageLoader.getInstance().displayImage(ImageDownloader.Scheme.ASSETS.wrap("goods/" + item + ".jpg"), itemImage, options);
-        ArrayList<String> itemList = new ListItemDao(context).queryItemByList(list);
-        if((itemList != null) &&(itemList.contains(item)) || clickTemp == position){
+        if((itemList != null) &&(itemList.contains(item))){
             itemText.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             itemText.getPaint().setAntiAlias(true);
             itemImage.setAlpha(0.5f);
-            clickTemp = -1;
-        }
-        if(unClickTemp == position){
-            itemText.getPaint().setFlags(0);
-            itemImage.setAlpha(1f);
-            unClickTemp = -1;
         }
         return view;
     }

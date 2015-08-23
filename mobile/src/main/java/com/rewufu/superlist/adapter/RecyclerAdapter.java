@@ -66,5 +66,5 @@ public class RecyclerAdapter extends RecyclerView.Adapter<MyViewHolder> {
 //        this.teams = list;
 //        this.notifyDataSetChanged();
 //    }
-    
+
 }

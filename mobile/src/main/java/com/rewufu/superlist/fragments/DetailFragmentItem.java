@@ -1,6 +1,7 @@
 package com.rewufu.superlist.fragments;
 
 
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.rewufu.superlist.DetailActivity;
 import com.rewufu.superlist.R;
@@ -30,6 +33,8 @@ public class DetailFragmentItem extends Fragment {
     private List<String> secondList;
     private GridView gridView;
     private String listName;
+    private ListItemDao listItemDao;
+
 
 
     /**
@@ -57,6 +62,7 @@ public class DetailFragmentItem extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             listName = getArguments().getString(ARG_PARAM1);
+            listItemDao = new ListItemDao(getActivity());
         }
     }
 
@@ -79,16 +85,25 @@ public class DetailFragmentItem extends Fragment {
                     secondAdapter.addAll(secondList);
                     gridView.setAdapter(secondAdapter);
                 }else {
-                    ArrayList<String> itemList = new ListItemDao(getActivity()).queryItemByList(listName);
+                    ArrayList<String> itemList = listItemDao.queryItemByList(listName);
                     if(itemList != null && itemList.contains(secondList.get(position))){
-                        new ListItemDao(getActivity()).deleteItem(secondList.get(position));
-                        secondAdapter.setUnClickTemp(position);
-                        secondAdapter.notifyDataSetChanged();
+                        listItemDao.deleteItem(secondList.get(position));
+                        View view1 = gridView.getChildAt(position - gridView.getFirstVisiblePosition());
+                        ImageView itemImage = (ImageView) view1.findViewById(R.id.itemImage);
+                        TextView itemText = (TextView) view1.findViewById(R.id.itemText);
+                        itemText.setText(list.get(position));
+                        itemText.getPaint().setFlags(0);
+                        itemImage.setAlpha(1f);
                         DetailActivity.change();
                     }else {
-                        new ListItemDao(getActivity()).insertListItem(secondList.get(position), listName);
-                        secondAdapter.setClickTemp(position);
-                        secondAdapter.notifyDataSetChanged();
+                        listItemDao.insertListItem(secondList.get(position), listName);
+                        View view1 = gridView.getChildAt(position - gridView.getFirstVisiblePosition());
+                        ImageView itemImage = (ImageView) view1.findViewById(R.id.itemImage);
+                        TextView itemText = (TextView) view1.findViewById(R.id.itemText);
+                        itemText.setText(list.get(position));
+                        itemText.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+                        itemText.getPaint().setAntiAlias(true);
+                        itemImage.setAlpha(0.5f);
                         DetailActivity.change();
                     }
                 }
