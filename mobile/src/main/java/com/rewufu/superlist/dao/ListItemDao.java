@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 
+import com.rewufu.superlist.entity.Goods;
 import com.rewufu.superlist.entity.ListItem;
 
 import java.util.ArrayList;
@@ -46,6 +47,32 @@ public class ListItemDao {
         }
         return null;
     }
+
+    public ArrayList<Goods> queryAll() {
+        SQLiteDatabase db = openHelper.getReadableDatabase();
+        if (db.isOpen()) {
+            Cursor cursor = db.rawQuery("select * from list_item;", null);
+            if (cursor != null && cursor.getCount() > 0) {
+                ArrayList<Goods> goodsList = new ArrayList<>();
+                while (cursor.moveToNext()) {
+                    String name = cursor.getString(0);
+                    String bought = cursor.getString(1);
+                    String list = cursor.getString(2);
+                    if(TextUtils.equals("t", bought)){
+                        goodsList.add(new Goods(name, "true", list));
+                    }else {
+                        goodsList.add(new Goods(name, "false", list));
+                    }
+                }
+                db.close();
+                return goodsList;
+            }
+            db.close();
+            return null;
+        }
+        return null;
+    }
+
 
     public ArrayList<String> queryNameByList(String list) {
         SQLiteDatabase db = openHelper.getReadableDatabase();

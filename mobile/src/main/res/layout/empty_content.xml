@@ -17,7 +17,7 @@
     <TextView
         android:layout_width="80dp"
         android:layout_height="50dp"
-        android:text="Add new shoping list"
+        android:text="Add new shopping list"
         android:layout_alignBottom="@+id/arrow"
         android:layout_toLeftOf="@+id/arrow"
         android:textSize="15dp"

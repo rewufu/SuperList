@@ -19,6 +19,7 @@ import com.rewufu.superlist.adapter.PagerAdapter;
 import com.rewufu.superlist.fragments.DetailFragmentItem;
 import com.rewufu.superlist.fragments.DetailFragmentList;
 
+@SuppressWarnings("ALL")
 public class DetailActivity extends AppCompatActivity {
     private String listName;
     private ViewPager viewPager;

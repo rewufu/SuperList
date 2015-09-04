@@ -27,7 +27,6 @@ import java.util.ArrayList;
 public class DetailFragmentList extends Fragment implements MyItemClickListener {
     private static final String ARG_PARAM1 = "param1";
     private String listName;
-    private RecyclerAdapter recyclerAdapter;
     private ArrayList<ListItem> list;
     private ListItemDao listItemDao;
 
@@ -65,7 +64,7 @@ public class DetailFragmentList extends Fragment implements MyItemClickListener 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerAdapter = new RecyclerAdapter(list, 1);
+        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(list, 1);
         recyclerAdapter.setOnItemClickListener(this);
         recyclerView.setAdapter(recyclerAdapter);
         return view;

@@ -1,88 +1,110 @@
 package com.rewufu.superlist;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.wearable.view.WearableListView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.util.Log;
 
-public class MainActivity extends Activity implements WearableListView.ClickListener{
-    String[] elements = { "List Item 1", "List Item 2" };
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataEvent;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.DataMapItem;
+import com.google.android.gms.wearable.Wearable;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.rewufu.superlist.Adapter.Adapter;
+import com.rewufu.superlist.entity.Goods;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends Activity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, DataApi.DataListener {
+
+    private static final String LIST_PATH = "/list";
+    private static final String LIST_KEY = "LIST_KEY";
+
+    private Adapter adapter;
+    private WearableListView listView;
+
+    ArrayList<String> elements = new ArrayList<>();
+    GoogleApiClient googleApiClient;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        WearableListView listView = (WearableListView) findViewById(R.id.wearable_list);
-        listView.setAdapter(new Adapter(this, elements));
-        listView.setClickListener(this);
-    }
-
-    @Override
-    public void onClick(WearableListView.ViewHolder viewHolder) {
-
-    }
-
-    @Override
-    public void onTopEmptyRegionClick() {
-
-    }
-
-    private static final class Adapter extends WearableListView.Adapter {
-        private String[] mDataset;
-        private final Context mContext;
-        private final LayoutInflater mInflater;
-
-        // Provide a suitable constructor (depends on the kind of dataset)
-        public Adapter(Context context, String[] dataset) {
-            mContext = context;
-            mInflater = LayoutInflater.from(context);
-            mDataset = dataset;
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Wearable.API)
+                .build();
+        listView = (WearableListView) findViewById(R.id.wearable_list);
+        if (null != elements) {
+            adapter = new Adapter(this, elements);
+            listView.setAdapter(adapter);
         }
+    }
 
-        // Provide a reference to the type of views you're using
-        public static class ItemViewHolder extends WearableListView.ViewHolder {
-            private TextView textView;
-            public ItemViewHolder(View itemView) {
-                super(itemView);
-                // find the text view within the custom item's layout
-                textView = (TextView) itemView.findViewById(R.id.name);
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        googleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        googleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Wearable.DataApi.addListener(googleApiClient, this);
+        Log.i("google", "onConnected");
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onDataChanged(DataEventBuffer dataEventBuffer) {
+        Log.i("google", "onDataChanged");
+        for (DataEvent event : dataEventBuffer) {
+            if (event.getType() == DataEvent.TYPE_CHANGED) {
+                DataItem item = event.getDataItem();
+                if (item.getUri().getPath().compareTo(LIST_PATH) == 0) {
+                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                    final String json = dataMap.getString(LIST_KEY);
+                    Log.i("google", json);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Gson gson = new Gson();
+                            List<Goods> goodsList = gson.fromJson(json, new TypeToken<List<Goods>>() {
+                            }.getType());
+                            for (int i = 0; i < goodsList.size(); i++) {
+                                String s = goodsList.get(i).getName();
+                                elements.add(s);
+                            }
+                            adapter = new Adapter(getApplicationContext(), elements);
+                            listView.setAdapter(adapter);
+                        }
+                    });
+                }
             }
-        }
-
-        // Create new views for list items
-        // (invoked by the WearableListView's layout manager)
-        @Override
-        public WearableListView.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                              int viewType) {
-            // Inflate our custom layout for list items
-            return new ItemViewHolder(mInflater.inflate(R.layout.list_item, null));
-        }
-
-        // Replace the contents of a list item
-        // Instead of creating new views, the list tries to recycle existing ones
-        // (invoked by the WearableListView's layout manager)
-        @Override
-        public void onBindViewHolder(WearableListView.ViewHolder holder,
-                                     int position) {
-            // retrieve the text view
-            ItemViewHolder itemHolder = (ItemViewHolder) holder;
-            TextView view = itemHolder.textView;
-            // replace text contents
-            view.setText(mDataset[position]);
-            // replace list item's metadata
-            holder.itemView.setTag(position);
-        }
-
-        // Return the size of your dataset
-        // (invoked by the WearableListView's layout manager)
-        @Override
-        public int getItemCount() {
-            return mDataset.length;
         }
     }
 }
