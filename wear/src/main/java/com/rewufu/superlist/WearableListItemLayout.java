@@ -44,8 +44,8 @@ public class WearableListItemLayout extends LinearLayout
         super.onFinishInflate();
         // These are defined in the layout file for list items
         // (see next section)
-        mCircle = (ImageView) findViewById(R.id.circle);
-        mName = (TextView) findViewById(R.id.name);
+        mCircle = (ImageView) findViewById(R.id.item_image);
+        mName = (TextView) findViewById(R.id.item_name);
     }
 
     @Override

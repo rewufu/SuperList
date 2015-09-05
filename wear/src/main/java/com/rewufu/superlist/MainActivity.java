@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.wearable.view.WearableListView;
 import android.util.Log;
+import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -17,12 +18,15 @@ import com.google.android.gms.wearable.Wearable;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.rewufu.superlist.Adapter.Adapter;
+import com.rewufu.superlist.dao.ListItemDao;
 import com.rewufu.superlist.entity.Goods;
+import com.rewufu.superlist.interfaces.MyItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, DataApi.DataListener {
+public class MainActivity extends Activity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, DataApi.DataListener, MyItemClickListener {
 
     private static final String LIST_PATH = "/list";
     private static final String LIST_KEY = "LIST_KEY";
@@ -30,7 +34,8 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
     private Adapter adapter;
     private WearableListView listView;
 
-    ArrayList<String> elements = new ArrayList<>();
+    ArrayList<String> elements;
+    private ListItemDao itemDao;
     GoogleApiClient googleApiClient;
 
 
@@ -44,10 +49,12 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
                 .addApi(Wearable.API)
                 .build();
         listView = (WearableListView) findViewById(R.id.wearable_list);
-        if (null != elements) {
-            adapter = new Adapter(this, elements);
-            listView.setAdapter(adapter);
-        }
+        itemDao = new ListItemDao(this);
+        elements = itemDao.queryList();
+        adapter = new Adapter(this, elements);
+        adapter.setOnItemClickListener(this);
+        listView.setAdapter(adapter);
+
     }
 
 
@@ -89,22 +96,40 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                     final String json = dataMap.getString(LIST_KEY);
                     Log.i("google", json);
+                    Gson gson = new Gson();
+                    List<Goods> goodsList = gson.fromJson(json, new TypeToken<List<Goods>>() {
+                    }.getType());
+                    for (int i = 0; i < goodsList.size(); i++) {
+                        ArrayList<String> list = itemDao.queryGoods();
+                        String name = goodsList.get(i).getName();
+                        if(list.contains(name)){
+                            ArrayList<String> listList = itemDao.queryListByName(name);
+                            String listName = goodsList.get(i).getListName();
+                            if(!listList.contains(listName)){
+                                itemDao.insertListItem(goodsList.get(i));
+                                Log.i("google", goodsList.get(i).getName()+" insert to database");
+                            }
+                        }else {
+                            itemDao.insertListItem(goodsList.get(i));
+                            Log.i("google", goodsList.get(i).getName()+" insert to database");
+                        }
+                    }
+                    elements.clear();
+                    elements = itemDao.queryList();
+                    adapter.updateData(elements);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Gson gson = new Gson();
-                            List<Goods> goodsList = gson.fromJson(json, new TypeToken<List<Goods>>() {
-                            }.getType());
-                            for (int i = 0; i < goodsList.size(); i++) {
-                                String s = goodsList.get(i).getName();
-                                elements.add(s);
-                            }
-                            adapter = new Adapter(getApplicationContext(), elements);
-                            listView.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
                         }
                     });
                 }
             }
         }
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Log.i("google", elements.get(position)+ " clicked");
     }
 }

@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private Fragment contentFragment;
 
     private GoogleApiClient mGoogleApiClient;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
