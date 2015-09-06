@@ -16,7 +16,7 @@
         android:layout_marginTop="5dp" />
     <TextView
         android:layout_width="80dp"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:text="Add new shopping list"
         android:layout_alignBottom="@+id/arrow"
         android:layout_toLeftOf="@+id/arrow"

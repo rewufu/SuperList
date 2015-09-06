@@ -20,8 +20,8 @@ public class MyViewHolder extends WearableListView.ViewHolder implements View.On
 
     public MyViewHolder(View itemView, MyItemClickListener itemClickListener, MyItemLongClickListener itemLongClickListener) {
         super(itemView);
-        image = (ImageView) itemView.findViewById(R.id.item_image);
-        name = (TextView) itemView.findViewById(R.id.item_name);
+        image = (ImageView) itemView.findViewById(R.id.detail_item_image);
+        name = (TextView) itemView.findViewById(R.id.detail_item_name);
         myItemClickListener = itemClickListener;
         myItemLongClickListener = itemLongClickListener;
         itemView.setOnClickListener(this);

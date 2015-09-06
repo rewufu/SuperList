@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
  */
 public class SQLiteOpenHelper extends android.database.sqlite.SQLiteOpenHelper {
     private Context context;
-    public static final  String CREATE_LIST_ITEM = "create table list_item (gName varchar(20), bought varchar(1), list varchar(20))";
+    public static final  String CREATE_LIST_ITEM = "create table list_item (gName varchar(20), bought varchar(10), list varchar(20))";
 
 
     public SQLiteOpenHelper(Context context) {

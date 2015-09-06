@@ -41,7 +41,7 @@ public class Adapter extends WearableListView.Adapter {
         private MyItemLongClickListener myItemLongClickListener;
         public ItemViewHolder(View itemView, MyItemClickListener itemClickListener, MyItemLongClickListener itemLongClickListener) {
             super(itemView);
-            textView = (TextView) itemView.findViewById(R.id.item_name);
+            textView = (TextView) itemView.findViewById(R.id.detail_item_name);
             myItemClickListener = itemClickListener;
             myItemLongClickListener = itemLongClickListener;
             itemView.setOnClickListener(this);

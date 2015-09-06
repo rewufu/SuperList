@@ -12,10 +12,8 @@ import java.util.ArrayList;
  */
 public class ListDao {
     private SQLiteOpenHelper openHelper;
-    private Context context;
 
     public ListDao(Context context) {
-        this.context = context;
         openHelper = new com.rewufu.superlist.database.SQLiteOpenHelper(context);
     }
 

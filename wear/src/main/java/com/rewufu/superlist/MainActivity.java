@@ -1,6 +1,7 @@
 package com.rewufu.superlist;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.wearable.view.WearableListView;
 import android.util.Log;
@@ -32,7 +33,6 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
     private static final String LIST_KEY = "LIST_KEY";
 
     private Adapter adapter;
-    private WearableListView listView;
 
     ArrayList<String> elements;
     private ListItemDao itemDao;
@@ -48,13 +48,12 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
                 .addOnConnectionFailedListener(this)
                 .addApi(Wearable.API)
                 .build();
-        listView = (WearableListView) findViewById(R.id.wearable_list);
+        WearableListView listView = (WearableListView) findViewById(R.id.wearable_list);
         itemDao = new ListItemDao(this);
         elements = itemDao.queryList();
         adapter = new Adapter(this, elements);
         adapter.setOnItemClickListener(this);
         listView.setAdapter(adapter);
-
     }
 
 
@@ -100,18 +99,14 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
                     List<Goods> goodsList = gson.fromJson(json, new TypeToken<List<Goods>>() {
                     }.getType());
                     for (int i = 0; i < goodsList.size(); i++) {
-                        ArrayList<String> list = itemDao.queryGoods();
-                        String name = goodsList.get(i).getName();
-                        if(list.contains(name)){
-                            ArrayList<String> listList = itemDao.queryListByName(name);
-                            String listName = goodsList.get(i).getListName();
-                            if(!listList.contains(listName)){
-                                itemDao.insertListItem(goodsList.get(i));
-                                Log.i("google", goodsList.get(i).getName()+" insert to database");
-                            }
-                        }else {
+                        Goods goods = goodsList.get(i);
+                        if (itemDao.queryGoods().contains(goods.getName())
+                                && itemDao.queryListByName(goods.getName()).contains(goods.getListName())){
+                                itemDao.updateItemBought(goods.getBought(), goods.getName(), goods.getListName());
+                            Log.i("google", goods.getName() + " update bought");
+                        } else {
                             itemDao.insertListItem(goodsList.get(i));
-                            Log.i("google", goodsList.get(i).getName()+" insert to database");
+                            Log.i("google", goods.getName() + " insert to database");
                         }
                     }
                     elements.clear();
@@ -130,6 +125,9 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
 
     @Override
     public void onItemClick(View view, int position) {
-        Log.i("google", elements.get(position)+ " clicked");
+        Log.i("google", elements.get(position) + " clicked");
+        Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+        intent.putExtra("listName", elements.get(position));
+        startActivity(intent);
     }
 }

@@ -8,7 +8,6 @@
     <string name="close">close</string>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="action_settings">Settings</string>
-
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="about_content">This application is a mobile and wearable android application. Click Sync Lists in left drawer, the lists in mobile will sync to wearable if the wearable is connected.</string>
+    <string name="sync_failed">Wearable is not connected or list is null.</string>
 </resources>

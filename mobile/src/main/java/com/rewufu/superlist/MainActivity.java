@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                             case R.id.drawer_mylists:
                                 fragmentManager.beginTransaction().replace(R.id.contentLayout, contentFragment).commit();
                                 return true;
-                            case R.id.drawer_settings:
+                            case R.id.drawer_sync:
                                 if (mGoogleApiClient.isConnected() && (null != new ListDao(getApplicationContext()).queryLists())) {
                                     PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(LIST_PATH);
                                     String json = getJson();
@@ -92,11 +92,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                                     PutDataRequest putDataRequest = putDataMapRequest.asPutDataRequest();
                                     PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(mGoogleApiClient, putDataRequest);
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Wearable is not connected or list is null.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), getString(R.string.sync_failed), Toast.LENGTH_SHORT).show();
                                 }
                                 return true;
                             case R.id.drawer_about:
-                                //show info in a dialog
+                                ContentDialog about = ContentDialog.newInstance("About", getString(R.string.about_content));
+                                about.show(getSupportFragmentManager(), "about");
                                 return true;
                         }
                         return false;

@@ -8,6 +8,15 @@ public class Goods {
     private String bought;
     private String listName;
 
+    @Override
+    public String toString() {
+        return "Goods{" +
+                "name='" + name + '\'' +
+                ", bought='" + bought + '\'' +
+                ", listName='" + listName + '\'' +
+                '}';
+    }
+
     public Goods(String name, String bought, String listName) {
         this.name = name;
         this.bought = bought;

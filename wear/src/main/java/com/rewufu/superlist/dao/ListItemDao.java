@@ -32,11 +32,7 @@ public class ListItemDao {
                 while (cursor.moveToNext()) {
                     String name = cursor.getString(0);
                     String bought = cursor.getString(1);
-                    if (TextUtils.equals("t", bought)) {
-                        itemList.add(new Goods(name, "true", list));
-                    } else {
-                        itemList.add(new Goods(name, "false", list));
-                    }
+                    itemList.add(new Goods(name, bought, list));
                 }
                 db.close();
                 return itemList;
@@ -134,7 +130,7 @@ public class ListItemDao {
     public void updateItemBought(String bought, String name, String list) {
         SQLiteDatabase db = openHelper.getWritableDatabase();
         if (db.isOpen()) {
-            db.execSQL("update list_item set bought = ? where gName = ? and list = ?;",
+            db.execSQL("update list_item set bought = ? where (gName = ?) and (list = ?);",
                     new String[]{bought, name, list});
             db.close();
         }
