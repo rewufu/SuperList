@@ -2,9 +2,7 @@
 
 ###About
 
-	This project is not completed. I'm working on.
-	It's a mobile and wearable app. Mark down the shopping list, and sync to wearable. 
-	Leave your phone in your bag when Supermarket shopping. Make wearable useful.
+	This application is a mobile and wearable android application for Supermarket list use. Click Sync Lists in left drawer in mobile, the lists in mobile will sync to wearable if the wearable is connected.
 
 
 ###System Requirements : 
